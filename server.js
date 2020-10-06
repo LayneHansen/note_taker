@@ -2,6 +2,7 @@ const { response } = require("express");
 var express = require("express");
 var app = express();
 var path = require("path");
+var fs = require("fs");
 var PORT = process.env.PORT || 3003;
 
 app.use(express.urlencoded({ extended: true }));
@@ -30,7 +31,16 @@ app.get("/index", function (request, response) {
     response.sendFile(path.join(__dirname + "/public/assets/css/styles.css"));
 })
 
-
+app.post("/api/notes", function(req, res) {
+    
+      var newNote = JSON.stringify(req.body);
+      // res.json(newNote);
+      console.log(newNote);
+      // newNote.push(req.body);
+      fs.writeFile('Develop/db/db.json', newNote, function (err) {
+        console.log(err);
+      });    
+});
 
 app.listen(PORT, function() {
     console.log("App listening on PORT: " + PORT);
