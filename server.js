@@ -22,9 +22,8 @@ app.post("/api/notes", function (req, res) {
     var newNote = req.body;
     newNote.id = Date.now();
     newJSON.push(newNote);
-    // console.log(newNote);
+
     fs.writeFile("./Develop/db/db.json", JSON.stringify(newJSON), function (err) {
-        // console.log(err);
         if (err) {
             throw err;
         };
@@ -39,7 +38,6 @@ app.delete("/api/notes/:id", function (req, res) {
     });
 
     fs.writeFile("./Develop/db/db.json", JSON.stringify(deleteJSON), function (err) {
-        // console.log(err);
         if (err) {
             throw err;
         };
@@ -54,16 +52,7 @@ app.get("/", function (request, response) {
 
 app.get("*", function (request, response) {
     response.sendFile(path.join(__dirname, "./public/index.html"));
-})
-
-// app.get("/notes", function (request, response) {
-//     response.sendFile(path.join(__dirname, "./public/notes.html"));
-// })
-
-// app.get("/index", function (request, response) {
-//     response.sendFile(path.join(__dirname, "./public/assets/css/styles.css"));
-// })
-
+});
 
 // app.listen function====================================================================================
 app.listen(PORT, function () {
