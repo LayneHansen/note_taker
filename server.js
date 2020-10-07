@@ -12,12 +12,12 @@ app.use(express.json());
 app.use(express.static("public"));
 
 
-app.get("/api/notes", function(req, res) {
+app.get("/api/notes", function (req, res) {
     var newJSON = require("./Develop/db/db.json");
-    res.json(newJSON)  
-});    
+    res.json(newJSON)
+});
 
-app.post("/api/notes", function(req, res) {
+app.post("/api/notes", function (req, res) {
     var newJSON = require("./Develop/db/db.json");
     var newNote = req.body;
     newNote.id = Date.now();
@@ -29,22 +29,22 @@ app.post("/api/notes", function(req, res) {
             throw err;
         };
         res.json(newNote);
-    });    
+    });
 });
 
-app.delete("/api/notes/:id", function(req, res) {
+app.delete("/api/notes/:id", function (req, res) {
     var deleteJSON = require("./Develop/db/db.json");
-    deleteJSON = deleteJSON.filter(function (note){
+    deleteJSON = deleteJSON.filter(function (note) {
         return note.id != req.params.id;
     });
-    
+
     fs.writeFile("./Develop/db/db.json", JSON.stringify(deleteJSON), function (err) {
         // console.log(err);
         if (err) {
             throw err;
         };
         res.json();
-    });    
+    });
 });
 
 // app.get functions=======================================================================================
@@ -66,7 +66,7 @@ app.get("*", function (request, response) {
 
 
 // app.listen function====================================================================================
-app.listen(PORT, function() {
+app.listen(PORT, function () {
     console.log("App listening on PORT: " + PORT);
 });
 
