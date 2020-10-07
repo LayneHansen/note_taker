@@ -5,43 +5,67 @@ var path = require("path");
 var fs = require("fs");
 var PORT = process.env.PORT || 3003;
 
+
+// app.use functions======================================================================================
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
-// app.use(express.static(__dirname, "/public"));
-// app.use("/js", express.static(__dirname + "public/js"));
-// app.use("/css", express.static(__dirname + "public/css"));
 
-// require("./routes/apiRoutes");
-// require("./routes/htmlRoutes");
 
+app.get("/api/notes", function(req, res) {
+    var newJSON = require("./Develop/db/db.json");
+    res.json(newJSON)  
+});    
+
+app.post("/api/notes", function(req, res) {
+    var newJSON = require("./Develop/db/db.json");
+    var newNote = req.body;
+    newNote.id = Date.now();
+    newJSON.push(newNote);
+    // console.log(newNote);
+    fs.writeFile("./Develop/db/db.json", JSON.stringify(newJSON), function (err) {
+        // console.log(err);
+        if (err) {
+            throw err;
+        };
+        res.json(newNote);
+    });    
+});
+
+app.delete("/api/notes/:id", function(req, res) {
+    var deleteJSON = require("./Develop/db/db.json");
+    deleteJSON = deleteJSON.filter(function (note){
+        return note.id != req.params.id;
+    });
+    
+    fs.writeFile("./Develop/db/db.json", JSON.stringify(deleteJSON), function (err) {
+        // console.log(err);
+        if (err) {
+            throw err;
+        };
+        res.json();
+    });    
+});
+
+// app.get functions=======================================================================================
 app.get("/", function (request, response) {
-    response.sendFile(path.join(__dirname, "/public"));
+    response.sendFile(path.join(__dirname, "./public/notes.html"));
 });
 
 app.get("*", function (request, response) {
-    response.sendFile(path.join(__dirname + "/public/index.html"));
+    response.sendFile(path.join(__dirname, "./public/index.html"));
 })
 
-app.get("/notes", function (request, response) {
-    response.sendFile(path.join(__dirname + "/public/notes.html"));
-})
+// app.get("/notes", function (request, response) {
+//     response.sendFile(path.join(__dirname, "./public/notes.html"));
+// })
 
-app.get("/index", function (request, response) {
-    response.sendFile(path.join(__dirname + "/public/assets/css/styles.css"));
-})
+// app.get("/index", function (request, response) {
+//     response.sendFile(path.join(__dirname, "./public/assets/css/styles.css"));
+// })
 
-app.post("/api/notes", function(req, res) {
-    
-      var newNote = JSON.stringify(req.body);
-      // res.json(newNote);
-      console.log(newNote);
-      // newNote.push(req.body);
-      fs.writeFile('Develop/db/db.json', newNote, function (err) {
-        console.log(err);
-      });    
-});
 
+// app.listen function====================================================================================
 app.listen(PORT, function() {
     console.log("App listening on PORT: " + PORT);
 });
