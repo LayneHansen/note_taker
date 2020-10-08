@@ -3,6 +3,7 @@ var express = require("express");
 var app = express();
 var path = require("path");
 var fs = require("fs");
+var newJSON = require("./db.json");
 var PORT = process.env.PORT || 3003;
 
 
@@ -13,36 +14,37 @@ app.use(express.static("public"));
 
 
 app.get("/api/notes", function (req, res) {
-    var newJSON = require("./Develop/db/db.json");
+    var newJSON = require("./db.json");
     res.json(newJSON)
 });
 
 app.post("/api/notes", function (req, res) {
-    var newJSON = require("./Develop/db/db.json");
+    var newJSON = require("./db.json");
     var newNote = req.body;
     newNote.id = Date.now();
     newJSON.push(newNote);
 
-    fs.writeFile("./Develop/db/db.json", JSON.stringify(newJSON), function (err) {
+    fs.writeFile("./db.json", JSON.stringify(newJSON), function (err) {
         if (err) {
             throw err;
         };
-        res.json(newNote);
     });
+    res.json(newNote);
 });
 
 app.delete("/api/notes/:id", function (req, res) {
-    var deleteJSON = require("./Develop/db/db.json");
+    var newJSON = require("./db.json");
+    var deleteJSON = JSON.parse(fs.readFileSync("./db.json").toString());
     deleteJSON = deleteJSON.filter(function (note) {
         return note.id != req.params.id;
     });
 
-    fs.writeFile("./Develop/db/db.json", JSON.stringify(deleteJSON), function (err) {
+    fs.writeFile("./db.json", JSON.stringify(deleteJSON), function (err) {
         if (err) {
             throw err;
         };
-        res.json();
     });
+    res.json(deleteJSON);
 });
 
 // app.get functions=======================================================================================
