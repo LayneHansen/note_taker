@@ -11,6 +11,12 @@
 * [License](#license)
 * [Questions](#questions)
 
+![note taker application screenshot](./note_taker_screenshot.png)
+
+## URL
+
+https://mysterious-brook-74088.herokuapp.com/notes.html
+
 ## Description
 This application allows the user to write notes and save them in a browser, to save the notes, and delete them when they're no longer needed.
 
